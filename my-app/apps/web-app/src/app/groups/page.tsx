@@ -48,34 +48,6 @@ export default function GroupsPage() {
 
         let response: any
 
-        let account;
-
-        if (typeof window.ethereum !== 'undefined') {
-            console.log('MetaMask is installed!');
-            try {
-                account = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            } catch (error) {
-                console.error('User rejected the request');
-            }
-        }
-        
-        const exampleMessage = "I wanna join Petnica."
-        try {
-            const from = "0xcF19A67969EceF74f2A4C77882af8D6A6F2C4744";
-            // For historical reasons, you must submit the message to sign in hex-encoded UTF-8.
-            // This uses a Node.js-style buffer shim in the browser.
-            const msg = `0x${Buffer.from(exampleMessage, "utf8").toString("hex")}`
-            if(window.ethereum as Window){
-                const sign = await window.ethereum.request({
-                    method: "personal_sign",
-                    params: [msg, account[0]],
-                })
-                console.log(sign);
-            }
-        } catch (err) {
-            console.error(err)
-        }
-          
         // if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
         //     response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
         //         method: "POST",

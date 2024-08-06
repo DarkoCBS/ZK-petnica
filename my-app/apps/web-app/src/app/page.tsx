@@ -26,13 +26,46 @@ export default function IdentitiesPage() {
     }, [setLogs])
 
     const createIdentity = useCallback(async () => {
-        const identity = new Identity()
 
-        setIdentity(identity)
+        let account;
 
-        localStorage.setItem("identity", identity.privateKey.toString())
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            } catch (error) {
+                console.error('User rejected the request');
+            }
+        }
+        
+        const exampleMessage = "I wanna join Petnica."
+        
+        try {
+            const from = account[0];
+            // For historical reasons, you must submit the message to sign in hex-encoded UTF-8.
+            // This uses a Node.js-style buffer shim in the browser.
+            const msg = `0x${Buffer.from(exampleMessage, "utf8").toString("hex")}`
 
-        setLogs("Your new Semaphore identity has just been created 🎉")
+            let sign;
+
+            if(window.ethereum as Window){
+                sign = await window.ethereum.request({
+                    method: "personal_sign",
+                    params: [msg, from],
+                })
+            }
+
+            const identity = new Identity(sign);
+
+            setIdentity(identity)
+    
+            localStorage.setItem("identity", identity.privateKey.toString())
+    
+            setLogs("Your new Semaphore identity has just been created 🎉")
+    
+        } catch (err) {
+            console.error(err)
+        }
+
     }, [setLogs])
 
     return (
