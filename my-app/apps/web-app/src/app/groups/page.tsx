@@ -8,6 +8,12 @@ import Stepper from "@/components/Stepper"
 import LogsContext from "@/context/LogsContext"
 import SemaphoreContext from "@/context/SemaphoreContext"
 
+declare global {
+    interface Window {
+      ethereum?: any
+    }
+}
+
 export default function GroupsPage() {
     const router = useRouter()
     const { setLogs } = useContext(LogsContext)
@@ -42,34 +48,62 @@ export default function GroupsPage() {
 
         let response: any
 
-        if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-            response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    abi: Feedback.abi,
-                    address: process.env.FEEDBACK_CONTRACT_ADDRESS,
-                    functionName: "joinGroup",
-                    functionParameters: [_identity.commitment.toString()]
-                })
-            })
-        } else {
-            response = await fetch("api/join", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    identityCommitment: _identity.commitment.toString()
-                })
-            })
-        }
+        let account;
 
-        if (response.status === 200) {
-            addUser(_identity.commitment.toString())
-
-            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
-        } else {
-            setLogs("Some error occurred, please try again!")
+        if (typeof window.ethereum !== 'undefined') {
+            console.log('MetaMask is installed!');
+            try {
+                account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            } catch (error) {
+                console.error('User rejected the request');
+            }
         }
+        
+        const exampleMessage = "I wanna join Petnica."
+        try {
+            const from = "0xcF19A67969EceF74f2A4C77882af8D6A6F2C4744";
+            // For historical reasons, you must submit the message to sign in hex-encoded UTF-8.
+            // This uses a Node.js-style buffer shim in the browser.
+            const msg = `0x${Buffer.from(exampleMessage, "utf8").toString("hex")}`
+            if(window.ethereum as Window){
+                const sign = await window.ethereum.request({
+                    method: "personal_sign",
+                    params: [msg, account[0]],
+                })
+                console.log(sign);
+            }
+        } catch (err) {
+            console.error(err)
+        }
+          
+        // if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+        //     response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({
+        //             abi: Feedback.abi,
+        //             address: process.env.FEEDBACK_CONTRACT_ADDRESS,
+        //             functionName: "joinGroup",
+        //             functionParameters: [_identity.commitment.toString()]
+        //         })
+        //     })
+        // } else {
+        //     response = await fetch("api/join", {
+        //         method: "POST",
+        //         headers: { "Content-Type": "application/json" },
+        //         body: JSON.stringify({
+        //             identityCommitment: _identity.commitment.toString()
+        //         })
+        //     })
+        // }
+
+        // if (response.status === 200) {
+        //     addUser(_identity.commitment.toString())
+
+        //     setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
+        // } else {
+        //     setLogs("Some error occurred, please try again!")
+        // }
 
         setLoading(false)
     }, [_identity, addUser, setLogs])
