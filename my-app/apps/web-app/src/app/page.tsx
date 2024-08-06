@@ -70,26 +70,10 @@ export default function IdentitiesPage() {
 
     return (
         <>
-            <h2 className="font-size: 3rem;">Identities</h2>
+            <h2 className="font-size: 3rem;">Petnica Web3</h2>
 
             <p>
-                The identity of a user in the Semaphore protocol. A{" "}
-                <a
-                    href="https://docs.semaphore.pse.dev/guides/identities"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    Semaphore identity
-                </a>{" "}
-                consists of an{" "}
-                <a
-                    href="https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/eddsa-poseidon"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    EdDSA
-                </a>{" "}
-                public/private key pair and a commitment, used as the public identifier of the identity.
+             Create your anonymous identity for joining a group by signing a message with your MetaMask account!
             </p>
 
             <div className="divider"></div>
