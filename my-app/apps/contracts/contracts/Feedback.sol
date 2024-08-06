@@ -3,7 +3,7 @@ pragma solidity ^0.8.23;
 
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
-contract Feedback {
+contract Petnica {
     ISemaphore public semaphore;
 
     uint256 public groupId;

@@ -48,34 +48,34 @@ export default function GroupsPage() {
 
         let response: any
 
-        // if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-        //     response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({
-        //             abi: Feedback.abi,
-        //             address: process.env.FEEDBACK_CONTRACT_ADDRESS,
-        //             functionName: "joinGroup",
-        //             functionParameters: [_identity.commitment.toString()]
-        //         })
-        //     })
-        // } else {
-        //     response = await fetch("api/join", {
-        //         method: "POST",
-        //         headers: { "Content-Type": "application/json" },
-        //         body: JSON.stringify({
-        //             identityCommitment: _identity.commitment.toString()
-        //         })
-        //     })
-        // }
+        if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+            response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    abi: Feedback.abi,
+                    address: process.env.FEEDBACK_CONTRACT_ADDRESS,
+                    functionName: "joinGroup",
+                    functionParameters: [_identity.commitment.toString()]
+                })
+            })
+        } else {
+            response = await fetch("api/join", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    identityCommitment: _identity.commitment.toString()
+                })
+            })
+        }
 
-        // if (response.status === 200) {
-        //     addUser(_identity.commitment.toString())
+        if (response.status === 200) {
+            addUser(_identity.commitment.toString())
 
-        //     setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
-        // } else {
-        //     setLogs("Some error occurred, please try again!")
-        // }
+            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
+        } else {
+            setLogs("Some error occurred, please try again!")
+        }
 
         setLoading(false)
     }, [_identity, addUser, setLogs])
