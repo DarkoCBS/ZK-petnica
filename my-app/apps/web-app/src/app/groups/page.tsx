@@ -38,6 +38,42 @@ export default function GroupsPage() {
         }
     }, [_users, setLogs])
 
+    useEffect(() => {
+        async function getAllGroups() {
+            let response;
+
+            console.log('here')
+
+            if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                })
+            } else {
+                response = await fetch("api/group", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                })
+            }
+
+            if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                })
+            } else {
+                response = await fetch("api/group", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                })
+            }
+
+
+        }
+
+        getAllGroups()
+    }, [])
+
     const joinGroup = useCallback(async () => {
         if (!_identity) {
             return

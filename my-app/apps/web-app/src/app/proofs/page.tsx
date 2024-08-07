@@ -85,7 +85,7 @@ export default function ProofsPage() {
         }
     }, [_identity, _users, addFeedback, setLogs])
 
-    console.log(JSON.stringify(_proof))
+    console.log(`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`)
 
     return (
         <>

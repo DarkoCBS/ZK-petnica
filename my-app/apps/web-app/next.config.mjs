@@ -10,12 +10,13 @@ if (!fs.existsSync("./.env")) {
 
 const nextConfig = withPWA({
     dest: "public",
-    disable: process.env.NODE_ENV === "development"
+    disable: process.env.NODE_ENV === "development",
 })({
     env: {
         INFURA_API_KEY: process.env.INFURA_API_KEY,
         ETHEREUM_PRIVATE_KEY: process.env.ETHEREUM_PRIVATE_KEY
-    }
+    },
+    reactStrictMode: false
 })
 
 export default nextConfig
