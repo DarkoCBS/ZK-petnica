@@ -20,12 +20,18 @@ contract Feedback is ERC721Enumerable {
 
     mapping (uint256 groupId => uint256[] tokenIds) public groupIdsToTokenIds;
 
+    mapping (uint256 groupId => uint256[] identityCommitments) public groupIdsToIdentityCommitments;
+
 
     constructor(address semaphoreAddress) ERC721("AnonymousEvents", "AE") {
         semaphore = ISemaphore(semaphoreAddress);
 
         // Create a default group
         createGroup("Petnica");
+    }
+
+    function getIdentityCommitments(uint256 groupId) external view returns (uint256[] memory) {
+        return groupIdsToIdentityCommitments[groupId];
     }
 
     function getAllGroups() external view returns (GroupInfo[] memory) {
@@ -51,6 +57,7 @@ contract Feedback is ERC721Enumerable {
 
     function joinGroup(uint256 groupId, uint256 identityCommitment) external {
         semaphore.addMember(groupId, identityCommitment);
+        groupIdsToIdentityCommitments[groupId].push(identityCommitment);
     }
 
     function enterEvent(
