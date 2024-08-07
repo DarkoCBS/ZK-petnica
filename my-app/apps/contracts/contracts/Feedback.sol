@@ -3,7 +3,7 @@ pragma solidity ^0.8.23;
 
 import "@semaphore-protocol/contracts/interfaces/ISemaphore.sol";
 
-contract Petnica {
+contract Feedback {
     ISemaphore public semaphore;
 
     uint256 public groupId;
@@ -18,7 +18,7 @@ contract Petnica {
         semaphore.addMember(groupId, identityCommitment);
     }
 
-    function sendFeedback(
+    function verifyMembership(
         uint256 merkleTreeDepth,
         uint256 merkleTreeRoot,
         uint256 nullifier,

@@ -32,7 +32,7 @@ export default function ProofsPage() {
         }
     }, [_feedback, setLogs])
 
-    const sendFeedback = useCallback(async () => {
+    const verifyMembership = useCallback(async () => {
         if (!_identity) {
             return
         }
@@ -54,7 +54,7 @@ export default function ProofsPage() {
                 const { points, merkleTreeDepth, merkleTreeRoot, nullifier, message } = await generateProof(
                     _identity,
                     group,
-                    feedback,
+                    "membership",
                     process.env.NEXT_PUBLIC_GROUP_ID as string
                 )
 
@@ -67,7 +67,7 @@ export default function ProofsPage() {
                         body: JSON.stringify({
                             abi: Feedback.abi,
                             address: process.env.FEEDBACK_CONTRACT_ADDRESS,
-                            functionName: "sendFeedback",
+                            functionName: "verifyMembership",
                             functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
                         })
                     })
@@ -129,7 +129,7 @@ export default function ProofsPage() {
             </div>
 
             <div>
-                <button className="button" onClick={sendFeedback} disabled={_loading}>
+                <button className="button" onClick={verifyMembership} disabled={_loading}>
                     <span>Send Feedback</span>
                     {_loading && <div className="loader"></div>}
                 </button>

@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const { feedback, merkleTreeDepth, merkleTreeRoot, nullifier, points } = await req.json()
 
     try {
-        const transaction = await contract.sendFeedback(merkleTreeDepth, merkleTreeRoot, nullifier, feedback, points)
+        const transaction = await contract.verifyMembership(merkleTreeDepth, merkleTreeRoot, nullifier, feedback, points)
 
         await transaction.wait()
 

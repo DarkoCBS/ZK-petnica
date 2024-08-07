@@ -86,7 +86,7 @@
                     "type": "uint256[8]"
                 }
             ],
-            "name": "sendFeedback",
+            "name": "verifyMembership",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
