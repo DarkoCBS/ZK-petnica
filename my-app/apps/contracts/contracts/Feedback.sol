@@ -23,6 +23,9 @@ contract Feedback is ERC721Enumerable {
 
     constructor(address semaphoreAddress) ERC721("AnonymousEvents", "AE") {
         semaphore = ISemaphore(semaphoreAddress);
+
+        // Create a default group
+        createGroup("Petnica");
     }
 
     function getAllGroups() external view returns (GroupInfo[] memory) {
@@ -39,7 +42,7 @@ contract Feedback is ERC721Enumerable {
         return groupIdsToTokenIds[groupId];
     }
 
-    function createGroup(string calldata name) external {
+    function createGroup(string memory name) public {
         uint256 groupId = groups.length;
         GroupInfo memory newGroupInfo = GroupInfo(groupId, name);
         groups.push(newGroupInfo);
