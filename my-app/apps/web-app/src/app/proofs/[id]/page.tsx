@@ -1,56 +1,23 @@
 "use client"
 
-import { Group, Identity, generateProof } from "@semaphore-protocol/core"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
 import Feedback from "../../../../contract-artifacts/Feedback.json"
-import Stepper from "../../../components/Stepper"
 import LogsContext from "../../../context/LogsContext"
-import SemaphoreContext from "../../../context/SemaphoreContext"
 
 
 export default function ProofsPage() {
-    const router = useRouter()
     const searchParams = useParams();
     const { setLogs } = useContext(LogsContext)
-    const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useState(false)
-    const [_identity, setIdentity] = useState<Identity>()
+    const [success, setSuccess] = useState(false)
+    const [fail, setFail] = useState(false)
 
     const params = JSON.parse(decodeURIComponent(searchParams.id as unknown as string))
 
-    useEffect(() => {
-        const privateKey = localStorage.getItem("identity")
-
-        if (!privateKey) {
-            router.push("/")
-            return
-        }
-
-        setIdentity(new Identity(privateKey))
-    }, [router])
-
-    useEffect(() => {
-        if (_feedback.length > 0) {
-            setLogs(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
-        }
-    }, [_feedback, setLogs])
-
     const verifyMembership = useCallback(async () => {
-        if (!_identity) {
-            return
-        }
-
-        if (typeof process.env.NEXT_PUBLIC_GROUP_ID !== "string") {
-            throw new Error("Please, define NEXT_PUBLIC_GROUP_ID in your .env file")
-        }
-
-        const feedback = prompt("Please enter your feedback:")
-
-        if (feedback && _users) {
+        if (params) {
             setLoading(true)
-
-            setLogs(`Posting your anonymous feedback...`)
 
             try {
                 let response: any = {}
@@ -85,21 +52,22 @@ export default function ProofsPage() {
                 }
 
                 if (response.status === 200) {
-                    addFeedback(feedback)
-
                     setLogs(`Your feedback has been posted 🎉`)
+                    setSuccess(true)
                 } else {
                     setLogs("Some error occurred, please try again!")
+                    setFail(true)
                 }
             } catch (error) {
                 console.error(error)
 
                 setLogs("Some error occurred, please try again!")
+                setFail(true)
             } finally {
                 setLoading(false)
             }
         }
-    }, [_identity, _users, addFeedback, setLogs])
+    }, [params, setLogs])
 
     return (
         <>
@@ -111,33 +79,26 @@ export default function ProofsPage() {
 
             <div className="divider"></div>
 
-            <div className="text-top">
-                <h3>Feedback messages ({_feedback.length})</h3>
-                <button className="button-link" onClick={refreshFeedback}>
-                    Refresh
-                </button>
-            </div>
-
-            <div>
-                <button className="button" onClick={verifyMembership} disabled={_loading}>
-                    <span>Send Feedback</span>
-                    {_loading && <div className="loader"></div>}
-                </button>
-            </div>
-
-            {_feedback.length > 0 && (
+            {!(fail || success) ? (
                 <div>
-                    {_feedback.map((f, i) => (
-                        <div key={i}>
-                            <p className="box box-text">{f}</p>
-                        </div>
-                    ))}
+                    <button className="button" onClick={verifyMembership} disabled={_loading}>
+                        <span>Send Feedback</span>
+                        {_loading && <div className="loader"></div>}
+                    </button>
                 </div>
+            ) : <></>}
+
+            {fail ? (
+                <div>Failed!</div>
+            ) : (
+                <></>
             )}
 
-            <div className="divider"></div>
-
-            <Stepper step={3} onPrevClick={() => router.push("/groups")} />
+            {success ? (
+                <div>Successful!</div>
+            ) : (
+                <></>
+            )}
         </>
     )
 }

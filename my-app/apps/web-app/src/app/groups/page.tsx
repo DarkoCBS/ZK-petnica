@@ -42,8 +42,6 @@ export default function GroupsPage() {
         async function getAllGroups() {
             let response;
 
-            console.log('here')
-
             if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
                 response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                     method: "GET",

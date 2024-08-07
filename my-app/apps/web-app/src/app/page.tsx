@@ -26,7 +26,6 @@ export default function IdentitiesPage() {
     }, [setLogs])
 
     const createIdentity = useCallback(async () => {
-
         let account;
 
         if (typeof window.ethereum !== 'undefined') {
