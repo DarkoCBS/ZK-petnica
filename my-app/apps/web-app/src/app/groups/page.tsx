@@ -16,168 +16,59 @@ declare global {
 
 export default function GroupsPage() {
     const router = useRouter()
-    const { setLogs } = useContext(LogsContext)
-    const { _users, refreshUsers, addUser } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useState(false)
-    const [_identity, setIdentity] = useState<Identity>()
+    const [_groupName, setGroupName] = useState("")
 
-    useEffect(() => {
-        const privateKey = localStorage.getItem("identity")
-
-        if (!privateKey) {
-            router.push("/")
-            return
-        }
-
-        setIdentity(new Identity(privateKey))
-    }, [router])
-
-    useEffect(() => {
-        if (_users.length > 0) {
-            setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
-        }
-    }, [_users, setLogs])
-
-    useEffect(() => {
-        async function getAllGroups() {
-            let response;
-
-            if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-                response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                })
-            } else {
-                response = await fetch("api/group", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                })
-            }
-
-            if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-                response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                })
-            } else {
-                response = await fetch("api/group", {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" },
-                })
-            }
-
-
-        }
-
-        getAllGroups()
-    }, [])
-
-    const joinGroup = useCallback(async () => {
-        if (!_identity) {
-            return
-        }
-
+    async function createGroup() {
+        if (_groupName === "") return
         setLoading(true)
-        setLogs(`Joining the Feedback group...`)
-
-        let response: any
-
+        let response;
         if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
             response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    abi: Feedback.abi,
-                    address: process.env.FEEDBACK_CONTRACT_ADDRESS,
-                    functionName: "joinGroup",
-                    functionParameters: [_identity.commitment.toString()]
+                    groupName: _groupName
                 })
             })
         } else {
-            response = await fetch("api/join", {
+            response = await fetch("api/group", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    identityCommitment: _identity.commitment.toString(),
-                    groupId: 0,
+                    groupName: _groupName
                 })
             })
         }
 
-        if (response.status === 200) {
-            addUser(_identity.commitment.toString())
-
-            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
-        } else {
-            setLogs("Some error occurred, please try again!")
-        }
-
         setLoading(false)
-    }, [_identity, addUser, setLogs])
-
-    const userHasJoined = useCallback((identity: Identity) => _users.includes(identity.commitment.toString()), [_users])
+    }
 
     return (
         <>
-            <h2>Groups</h2>
+            <h2>Create Group</h2>
 
-            <p>
-                <a
-                    href="https://docs.semaphore.pse.dev/guides/groups"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    Semaphore groups
-                </a>{" "}
-                are{" "}
-                <a
-                    href="https://zkkit.pse.dev/classes/_zk_kit_imt.LeanIMT.html"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    Lean incremental Merkle trees
-                </a>{" "}
-                in which each leaf contains an identity commitment for a user. Groups can be abstracted to represent
-                events, polls, or organizations.
-            </p>
+            <div>
+                <p>Add group</p>
+                <input type="text" placeholder="Group name" value={_groupName} onChange={(e) => setGroupName(e.target.value)} />
+            </div>
 
             <div className="divider"></div>
-
-            <div className="text-top">
-                <h3>Group users ({_users.length})</h3>
-                <button className="button-link" onClick={refreshUsers}>
-                    Refresh
-                </button>
-            </div>
 
             <div>
                 <button
                     className="button"
-                    onClick={joinGroup}
-                    disabled={_loading || !_identity || userHasJoined(_identity)}
+                    onClick={createGroup}
+                    disabled={_loading}
                 >
                     <span>Join group</span>
                     {_loading && <div className="loader"></div>}
                 </button>
             </div>
 
-            {_users.length > 0 && (
-                <div>
-                    {_users.map((user, i) => (
-                        <div key={i}>
-                            <p className="box box-text">{user.toString()}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            <div className="divider"></div>
-
-            <Stepper
-                step={2}
-                onPrevClick={() => router.push("/")}
-                onNextClick={_identity && userHasJoined(_identity) ? () => router.push("/proofs") : undefined}
-            />
+            <button className="button-stepper" onClick={() => router.push("/")}>
+                Back
+            </button>
         </>
     )
 }

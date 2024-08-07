@@ -53,7 +53,7 @@ export async function GET() {
     }
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
     if (typeof process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS !== "string") {
         throw new Error("Please, define NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS in your .env file")
     }
@@ -82,9 +82,11 @@ export async function POST() {
 
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
+
+    const { groupName } = await req.json()
     
     try {
-        const transaction = await contract.createGroup("Nova grupa")
+        const transaction = await contract.createGroup(groupName)
 
         await transaction.wait()
 

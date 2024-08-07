@@ -52,18 +52,6 @@ export default function GroupsPage() {
 
             if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
                 response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                })
-            } else {
-                response = await fetch("api/group", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                })
-            }
-
-            if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
-                response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 })
