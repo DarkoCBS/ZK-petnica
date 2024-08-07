@@ -7,10 +7,10 @@ export default function IdentitiesPage() {
 
     return (
         <>
-            <h2 className="font-size: 3rem;">Welcome to our ZK Platform</h2>
+            <h2 className="font-size: 3rem;">Welcome to ZK Events</h2>
 
             <p>
-               We enable you to verify membership to group without revealing your identity!
+                We enable you to verify your membership in a group without revealing your identity!
             </p>
 
             <div className="divider"></div>

@@ -38,7 +38,7 @@ export default function PageContainer({
         <div>
             <div className="header">
                 <Link href="/" className="header-left">
-                    Feedback
+                    ZK Events
                 </Link>
                 <div className="header-right">
                     <a

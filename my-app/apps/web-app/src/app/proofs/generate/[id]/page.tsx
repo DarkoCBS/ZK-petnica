@@ -61,8 +61,6 @@ export default function ProofsPage() {
         if (_users) {
             setLoading(true)
 
-            setLogs(`Posting your anonymous feedback...`)
-
             try {
                 let response;
                 if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
@@ -133,7 +131,9 @@ export default function ProofsPage() {
                 _proof ? (
                     <>
                     <div id="qrCode" className="qrcode-container">
-                        <QRCode value={`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`} />
+                        <QRCode value={`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`} 
+                            level="M" size={440}
+                        />
                     </div>
                     <p className="qr-text">This is your proof as QR code. Show it at event entrance.</p>
                     <button className="button" onClick={downloadQRCode}>Download QR Code</button>

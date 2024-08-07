@@ -116,27 +116,7 @@ export default function GroupsPage() {
 
     return (
         <>
-            <h2>Groups</h2>
-
-            <p>
-                <a
-                    href="https://docs.semaphore.pse.dev/guides/groups"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    Semaphore groups
-                </a>{" "}
-                are{" "}
-                <a
-                    href="https://zkkit.pse.dev/classes/_zk_kit_imt.LeanIMT.html"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    Lean incremental Merkle trees
-                </a>{" "}
-                in which each leaf contains an identity commitment for a user. Groups can be abstracted to represent
-                events, polls, or organizations.
-            </p>
+            <h2>Available Events</h2>
 
             <div className="divider"></div>
 

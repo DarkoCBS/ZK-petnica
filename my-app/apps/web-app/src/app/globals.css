@@ -214,6 +214,23 @@ a {
     padding: 16px;
 }
 
+.label {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--slate500);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--slate700);
+    background-color: var(--slate100);
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);

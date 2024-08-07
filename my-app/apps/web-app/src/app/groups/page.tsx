@@ -49,10 +49,15 @@ export default function GroupsPage() {
             <h2>Create Group</h2>
 
             <div>
-                <p>Add group</p>
-                <input type="text" placeholder="Group name" value={_groupName} onChange={(e) => setGroupName(e.target.value)} />
+                <p className="label">Add group</p>
+                <input
+                    type="text"
+                    placeholder="Group name"
+                    value={_groupName}
+                    onChange={(e) => setGroupName(e.target.value)}
+                    className="input"
+                />
             </div>
-
             <div className="divider"></div>
 
             <div>
@@ -61,7 +66,7 @@ export default function GroupsPage() {
                     onClick={createGroup}
                     disabled={_loading}
                 >
-                    <span>Join group</span>
+                    <span>Create group</span>
                     {_loading && <div className="loader"></div>}
                 </button>
             </div>
