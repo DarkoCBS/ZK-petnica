@@ -32,12 +32,16 @@ export async function GET(req: NextRequest) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
 
-    const { groupId } = await req.json()
+    const url = new URL(req.url);
+    const queryParams = url.searchParams;
+  
+    // Example: Get a specific query parameter
+    const paramValue = queryParams.get('groupId'); // replace 'paramName' with your query parameter key
     
     try {
-        const transaction = await contract.getIdentityCommitments(groupId)
+        const transaction = await contract.getIdentityCommitments(paramValue)
 
-        const data = transaction.map((comm: any) => comm.toString())
+        const data = transaction.map((comm: any) => BigInt(comm).toString())
 
         return new Response(JSON.stringify({
           data: data,

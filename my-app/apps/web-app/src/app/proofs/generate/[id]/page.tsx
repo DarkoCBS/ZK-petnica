@@ -51,6 +51,25 @@ export default function ProofsPage() {
             setLogs(`Posting your anonymous feedback...`)
 
             try {
+                let response;
+                if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                    response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+
+                    })
+                } else {
+                    response = await fetch(`/api/commitments?groupId=${params}`, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" },
+                    })
+                }
+
+                const res = await response.json()
+
+                console.log(res.data)
+                console.log(_users)
+
                 const group = new Group(_users)
 
                 const { points, merkleTreeDepth, merkleTreeRoot, nullifier, message } = await generateProof(
