@@ -8,6 +8,8 @@ import Stepper from "../../../../components/Stepper"
 import Feedback from "../../../../../contract-artifacts/Feedback.json"
 import LogsContext from "../../../../context/LogsContext"
 import SemaphoreContext from "../../../../context/SemaphoreContext"
+import { saveAs } from 'file-saver'
+import html2canvas from 'html2canvas'
 
 export default function ProofsPage() {
     const router = useRouter()
@@ -32,6 +34,19 @@ export default function ProofsPage() {
         setIdentity(new Identity(privateKey))
     }, [router])
 
+    const downloadQRCode = () => {
+        const qrCodeElement = document.getElementById('qrCode');
+        if (qrCodeElement) {
+            html2canvas(qrCodeElement).then(canvas => {
+                canvas.toBlob(blob => {
+                    if (blob) {
+                        saveAs(blob, 'qrcode.png');
+                    }
+                });
+            });
+        }
+    }
+
     useEffect(() => {
         if (_feedback.length > 0) {
             setLogs(`${_feedback.length} feedback retrieved from the group 🤙🏽`)
@@ -43,9 +58,7 @@ export default function ProofsPage() {
             return
         }
 
-        const feedback = prompt("Please enter your feedback:")
-
-        if (feedback && _users) {
+        if (_users) {
             setLoading(true)
 
             setLogs(`Posting your anonymous feedback...`)
@@ -97,37 +110,15 @@ export default function ProofsPage() {
 
     return (
         <>
-            <h2>Proofs</h2>
-
-            <p>
-                Semaphore members can anonymously{" "}
-                <a
-                    href="https://docs.semaphore.pse.dev/guides/proofs"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    prove
-                </a>{" "}
-                that they are part of a group and send their anonymous messages. Messages could be votes, leaks,
-                reviews, feedback, etc.
-            </p>
-
-            <div className="divider"></div>
-
-            <div className="text-top">
-                <h3>Feedback messages ({_feedback.length})</h3>
-                <button className="button-link" onClick={refreshFeedback}>
-                    Refresh
-                </button>
+            <div>
+                <button className="button-stepper" onClick={refreshFeedback}>Refresh</button>
             </div>
-
             <div>
                 <button className="button" onClick={enterEvent} disabled={_loading}>
-                    <span>Send Feedback</span>
+                    <span>Get QR code ticket</span>
                     {_loading && <div className="loader"></div>}
                 </button>
             </div>
-
             {_feedback.length > 0 && (
                 <div>
                     {_feedback.map((f, i) => (
@@ -137,20 +128,19 @@ export default function ProofsPage() {
                     ))}
                 </div>
             )}
-
             <div className="divider"></div>
-
             {
                 _proof ? (
                     <>
-                    <div style={{ background: 'white', padding: '16px' }}>
-                     <QRCode value={`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`} />
+                    <div id="qrCode" className="qrcode-container">
+                        <QRCode value={`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`} />
                     </div>
+                    <p className="qr-text">This is your proof as QR code. Show it at event entrance.</p>
+                    <button className="button" onClick={downloadQRCode}>Download QR Code</button>
                     </>
                 ) : <></>
             }
-
-            <Stepper step={3} onPrevClick={() => router.push("/join")} />
+            <Stepper step={3} onPrevClick={() => router.push("/groups")} />
         </>
     )
 }

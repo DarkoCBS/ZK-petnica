@@ -82,7 +82,7 @@ export default function ProofsPage() {
             {!(fail || success) ? (
                 <div>
                     <button className="button" onClick={verifyMembership} disabled={_loading}>
-                        <span>Send Feedback</span>
+                        <span>Redeem ticket</span>
                         {_loading && <div className="loader"></div>}
                     </button>
                 </div>

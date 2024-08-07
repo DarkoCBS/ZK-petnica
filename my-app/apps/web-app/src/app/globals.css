@@ -199,6 +199,21 @@ a {
     margin-left: 1rem;
 }
 
+.qrcode-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    background: white;
+    margin: 0 auto;
+    max-width: 500px; /* Adjust the max-width as needed */
+}
+
+.qr-text {
+    text-align: center;
+    padding: 16px;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
