@@ -2,22 +2,24 @@
 
 import { Group, Identity, generateProof } from "@semaphore-protocol/core"
 import QRCode from "react-qr-code";
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
-import Feedback from "../../../contract-artifacts/Feedback.json"
-import Stepper from "../../components/Stepper"
-import LogsContext from "../../context/LogsContext"
-import SemaphoreContext from "../../context/SemaphoreContext"
+import Stepper from "../../../../components/Stepper"
+import Feedback from "../../../../../contract-artifacts/Feedback.json"
+import LogsContext from "../../../../context/LogsContext"
+import SemaphoreContext from "../../../../context/SemaphoreContext"
 
 export default function ProofsPage() {
     const router = useRouter()
+    const searchParams = useParams()
     const { setLogs } = useContext(LogsContext)
     const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useState(false)
     const [_identity, setIdentity] = useState<Identity>()
     const [_proof, setProof] = useState<{
-        points: any, merkleTreeDepth: any, merkleTreeRoot: any, nullifier: any, message: any
+        points: any, merkleTreeDepth: any, merkleTreeRoot: any, nullifier: any, message: any, groupId: any
     }>()
+    const params = JSON.parse(decodeURIComponent(searchParams.id as unknown as string))
 
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
@@ -41,10 +43,6 @@ export default function ProofsPage() {
             return
         }
 
-        if (typeof process.env.NEXT_PUBLIC_GROUP_ID !== "string") {
-            throw new Error("Please, define NEXT_PUBLIC_GROUP_ID in your .env file")
-        }
-
         const feedback = prompt("Please enter your feedback:")
 
         if (feedback && _users) {
@@ -59,22 +57,13 @@ export default function ProofsPage() {
                     _identity,
                     group,
                     "membership",
-                    process.env.NEXT_PUBLIC_GROUP_ID as string
+                    params
                 )
 
                 setProof({
-                    points, merkleTreeDepth, merkleTreeRoot, nullifier, message
+                    points, merkleTreeDepth, merkleTreeRoot, nullifier, message, groupId: params,
                 })
 
-                let response: any = {}
-
-                if (response.status === 200) {
-                    addFeedback(feedback)
-
-                    setLogs(`Your feedback has been posted 🎉`)
-                } else {
-                    setLogs("Some error occurred, please try again!")
-                }
             } catch (error) {
                 console.error(error)
 
@@ -142,7 +131,7 @@ export default function ProofsPage() {
                 ) : <></>
             }
 
-            <Stepper step={3} onPrevClick={() => router.push("/groups")} />
+            <Stepper step={3} onPrevClick={() => router.push("/join")} />
         </>
     )
 }

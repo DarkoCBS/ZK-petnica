@@ -22,7 +22,7 @@ export default function ProofsPage() {
             try {
                 let response: any = {}
 
-                const { merkleTreeDepth, merkleTreeRoot, nullifier, message, points } = params
+                const { merkleTreeDepth, merkleTreeRoot, nullifier, message, points, groupId } = params
 
                 if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
                     response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
@@ -46,7 +46,7 @@ export default function ProofsPage() {
                             nullifier,
                             points,
                             mintTo: "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
-                            groupId: 0,
+                            groupId,
                         })
                     })
                 }

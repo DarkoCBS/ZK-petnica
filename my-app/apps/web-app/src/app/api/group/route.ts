@@ -35,8 +35,6 @@ export async function GET() {
     try {
         const transaction = await contract.getAllGroups()
 
-        console.log('I get an error here')
-
         const data = transaction.map((group: any) => ({
             name: group.name,
             groupId: group.groupId.toString(),
