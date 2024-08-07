@@ -44,8 +44,8 @@ describe("Feedback", () => {
         })
     })
 
-    describe("# verifyMembership", () => {
-        it("Should allow users to send verify membership anonymously", async () => {
+    describe("# enterEvent", () => {
+        it("Should allow users to send enter event anonymously", async () => {
             const { semaphoreContract, feedbackContract, groupId } = await loadFixture(deployFeedbackFixture)
 
             const users = [new Identity(), new Identity()]
@@ -60,7 +60,7 @@ describe("Feedback", () => {
 
             const proof = await generateProof(users[1], group, membership, groupId)
 
-            const transaction = feedbackContract.verifyMembership(
+            const transaction = feedbackContract.enterEvent(
                 proof.merkleTreeDepth,
                 proof.merkleTreeRoot,
                 proof.nullifier,

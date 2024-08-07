@@ -32,7 +32,7 @@ export default function ProofsPage() {
         }
     }, [_feedback, setLogs])
 
-    const verifyMembership = useCallback(async () => {
+    const enterEvent = useCallback(async () => {
         if (!_identity) {
             return
         }
@@ -58,6 +58,16 @@ export default function ProofsPage() {
                     process.env.NEXT_PUBLIC_GROUP_ID as string
                 )
 
+                const jsonString = JSON.stringify({
+                    points,
+                    merkleTreeDepth,
+                    merkleTreeRoot,
+                    nullifier,
+                    message
+                });
+                
+                console.log(jsonString);
+
                 let response: any
 
                 if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
@@ -67,7 +77,7 @@ export default function ProofsPage() {
                         body: JSON.stringify({
                             abi: Feedback.abi,
                             address: process.env.FEEDBACK_CONTRACT_ADDRESS,
-                            functionName: "verifyMembership",
+                            functionName: "enterEvent",
                             functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
                         })
                     })
@@ -129,7 +139,7 @@ export default function ProofsPage() {
             </div>
 
             <div>
-                <button className="button" onClick={verifyMembership} disabled={_loading}>
+                <button className="button" onClick={enterEvent} disabled={_loading}>
                     <span>Send Feedback</span>
                     {_loading && <div className="loader"></div>}
                 </button>
