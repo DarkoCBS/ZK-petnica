@@ -26,5 +26,8 @@
   "packageManager": "yarn@4.1.0",
   "devDependencies": {
     "prettier": "^3.2.5"
+  },
+  "dependencies": {
+    "react-qr-code": "^2.0.15"
   }
 }

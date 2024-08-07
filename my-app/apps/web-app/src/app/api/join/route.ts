@@ -32,10 +32,10 @@ export async function POST(req: NextRequest) {
     const signer = new Wallet(ethereumPrivateKey, provider)
     const contract = new Contract(contractAddress, Feedback.abi, signer)
 
-    const { identityCommitment } = await req.json()
+    const { identityCommitment, groupId } = await req.json()
 
     try {
-        const transaction = await contract.joinGroup(identityCommitment)
+        const transaction = await contract.joinGroup(groupId, identityCommitment)
 
         await transaction.wait()
 

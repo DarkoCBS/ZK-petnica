@@ -1,23 +1,23 @@
 "use client"
 
 import { Group, Identity, generateProof } from "@semaphore-protocol/core"
-import QRCode from "react-qr-code";
-import { useRouter } from "next/navigation"
+import { useRouter, useParams } from "next/navigation"
 import { useCallback, useContext, useEffect, useState } from "react"
-import Feedback from "../../../contract-artifacts/Feedback.json"
-import Stepper from "../../components/Stepper"
-import LogsContext from "../../context/LogsContext"
-import SemaphoreContext from "../../context/SemaphoreContext"
+import Feedback from "../../../../contract-artifacts/Feedback.json"
+import Stepper from "../../../components/Stepper"
+import LogsContext from "../../../context/LogsContext"
+import SemaphoreContext from "../../../context/SemaphoreContext"
+
 
 export default function ProofsPage() {
     const router = useRouter()
+    const searchParams = useParams();
     const { setLogs } = useContext(LogsContext)
     const { _users, _feedback, refreshFeedback, addFeedback } = useContext(SemaphoreContext)
     const [_loading, setLoading] = useState(false)
     const [_identity, setIdentity] = useState<Identity>()
-    const [_proof, setProof] = useState<{
-        points: any, merkleTreeDepth: any, merkleTreeRoot: any, nullifier: any, message: any
-    }>()
+
+    const params = JSON.parse(decodeURIComponent(searchParams.id as unknown as string))
 
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
@@ -36,7 +36,7 @@ export default function ProofsPage() {
         }
     }, [_feedback, setLogs])
 
-    const enterEvent = useCallback(async () => {
+    const verifyMembership = useCallback(async () => {
         if (!_identity) {
             return
         }
@@ -53,20 +53,36 @@ export default function ProofsPage() {
             setLogs(`Posting your anonymous feedback...`)
 
             try {
-                const group = new Group(_users)
-
-                const { points, merkleTreeDepth, merkleTreeRoot, nullifier, message } = await generateProof(
-                    _identity,
-                    group,
-                    "membership",
-                    process.env.NEXT_PUBLIC_GROUP_ID as string
-                )
-
-                setProof({
-                    points, merkleTreeDepth, merkleTreeRoot, nullifier, message
-                })
-
                 let response: any = {}
+
+                const { merkleTreeDepth, merkleTreeRoot, nullifier, message, points } = params
+
+                if (process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK) {
+                    response = await fetch(process.env.OPENZEPPELIN_AUTOTASK_WEBHOOK, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            abi: Feedback.abi,
+                            address: process.env.FEEDBACK_CONTRACT_ADDRESS,
+                            functionName: "verifyMembership",
+                            functionParameters: [merkleTreeDepth, merkleTreeRoot, nullifier, message, points]
+                        })
+                    })
+                } else {
+                    response = await fetch("/api/feedback", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            feedback: message,
+                            merkleTreeDepth,
+                            merkleTreeRoot,
+                            nullifier,
+                            points,
+                            mintTo: "0xa0Ee7A142d267C1f36714E4a8F75612F20a79720",
+                            groupId: 0,
+                        })
+                    })
+                }
 
                 if (response.status === 200) {
                     addFeedback(feedback)
@@ -85,23 +101,12 @@ export default function ProofsPage() {
         }
     }, [_identity, _users, addFeedback, setLogs])
 
-    console.log(JSON.stringify(_proof))
-
     return (
         <>
             <h2>Proofs</h2>
 
             <p>
-                Semaphore members can anonymously{" "}
-                <a
-                    href="https://docs.semaphore.pse.dev/guides/proofs"
-                    target="_blank"
-                    rel="noreferrer noopener nofollow"
-                >
-                    prove
-                </a>{" "}
-                that they are part of a group and send their anonymous messages. Messages could be votes, leaks,
-                reviews, feedback, etc.
+                Semaphore members can anonymously
             </p>
 
             <div className="divider"></div>
@@ -114,7 +119,7 @@ export default function ProofsPage() {
             </div>
 
             <div>
-                <button className="button" onClick={enterEvent} disabled={_loading}>
+                <button className="button" onClick={verifyMembership} disabled={_loading}>
                     <span>Send Feedback</span>
                     {_loading && <div className="loader"></div>}
                 </button>
@@ -131,16 +136,6 @@ export default function ProofsPage() {
             )}
 
             <div className="divider"></div>
-
-            {
-                _proof ? (
-                    <>
-                    <div style={{ background: 'white', padding: '16px' }}>
-                     <QRCode value={`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`} />
-                    </div>
-                    </>
-                ) : <></>
-            }
 
             <Stepper step={3} onPrevClick={() => router.push("/groups")} />
         </>

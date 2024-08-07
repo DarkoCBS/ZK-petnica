@@ -64,7 +64,8 @@ export default function GroupsPage() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    identityCommitment: _identity.commitment.toString()
+                    identityCommitment: _identity.commitment.toString(),
+                    groupId: 0,
                 })
             })
         }
