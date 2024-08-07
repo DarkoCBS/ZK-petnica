@@ -43,7 +43,7 @@ contract Feedback is ERC721Enumerable {
     }
 
     function createGroup(string memory name) public {
-        uint256 groupId = groups.length;
+        uint256 groupId = semaphore.createGroup();
         GroupInfo memory newGroupInfo = GroupInfo(groupId, name);
         groups.push(newGroupInfo);
         groupIdToGroupInfo[groupId] = newGroupInfo;

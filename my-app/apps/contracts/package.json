@@ -2,7 +2,7 @@
     "name": "monorepo-ethers-contracts",
     "private": true,
     "scripts": {
-        "dev": "hardhat node & yarn deploy --network localhost",
+        "dev": "dotenv -e .env -- hardhat node & yarn deploy --network localhost",
         "compile": "hardhat compile",
         "deploy": "yarn compile && hardhat deploy",
         "verify": "hardhat verify",
@@ -51,7 +51,9 @@
     },
     "dependencies": {
         "@openzeppelin/contracts": "^5.0.2",
-        "@semaphore-protocol/contracts": "4.0.1"
+        "@semaphore-protocol/contracts": "4.0.1",
+        "dotenv-cli": "^7.4.2",
+        "hardhat-ethernal": "^3.2.5"
     },
     "packageManager": "yarn@4.1.0"
 }
