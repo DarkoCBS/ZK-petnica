@@ -49,7 +49,7 @@ export default function PageContainer({
                         target="_blank"
                         rel="noreferrer noopener nofollow"
                     >
-                        <div>{shortenString(process.env.NEXT_PUBLIC_FEEDBACK_CONTRACT_ADDRESS as string, [6, 4])}</div>
+                        <div>{shortenString(process.env.NEXT_PUBLIC_ADDR as string, [6, 4])}</div>
                     </a>
                     <a
                         href="https://github.com/semaphore-protocol/semaphore"
