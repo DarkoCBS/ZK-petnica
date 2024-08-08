@@ -69,7 +69,7 @@ export default function IdentitiesPage() {
 
     return (
         <>
-            <h2 className="font-size: 3rem;">Petnica Web3</h2>
+            <h2 className="font-size: 3rem;">Anonymous identity</h2>
 
             <p>
              Create your anonymous identity for joining a group by signing a message with your MetaMask account!
@@ -103,7 +103,7 @@ export default function IdentitiesPage() {
 
             <div className="divider"></div>
 
-            <Stepper step={1} onNextClick={_identity && (() => router.push("/join"))} />
+            <Stepper step={1} onPrevClick={() => router.push("/")} onNextClick={_identity && (() => router.push("/join"))} />
         </>
     )
 }

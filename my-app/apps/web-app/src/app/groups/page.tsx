@@ -19,6 +19,8 @@ export default function GroupsPage() {
     const router = useRouter()
     const [_loading, setLoading] = useState(false)
     const [_groupName, setGroupName] = useState("")
+    const [success, setSuccess] = useState(false)
+    const [fail, setFail] = useState(false)
 
     async function createGroup() {
         if (_groupName === "") return
@@ -44,8 +46,10 @@ export default function GroupsPage() {
 
         if (response.status === 200) {
             setLogs("Successfully created group 🤙🏽")
+            setSuccess(true)
         } else {
             setLogs("Failed to create group")
+            setFail(true)
         }
 
         setLoading(false)
@@ -65,7 +69,6 @@ export default function GroupsPage() {
                     className="input"
                 />
             </div>
-            <div className="divider"></div>
 
             <div>
                 <button
@@ -77,6 +80,20 @@ export default function GroupsPage() {
                     {_loading && <div className="loader"></div>}
                 </button>
             </div>
+
+            {fail ? (
+                <div className="flashy-message fail-message">Failed!</div>
+            ) : (
+                <></>
+            )}
+
+            {success ? (
+                <div className="flashy-message success-message">Successful! You created {_groupName}!</div>
+            ) : (
+                <></>
+            )}
+
+            <div className="divider"></div>
 
             <button className="button-stepper" onClick={() => router.push("/")}>
                 Back

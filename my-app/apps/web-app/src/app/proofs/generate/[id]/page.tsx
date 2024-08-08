@@ -109,13 +109,11 @@ export default function ProofsPage() {
     return (
         <>
             <div>
-                <button className="button-stepper" onClick={refreshFeedback}>Refresh</button>
-            </div>
-            <div>
+                {!_proof ? (
                 <button className="button" onClick={enterEvent} disabled={_loading}>
                     <span>Get QR code ticket</span>
                     {_loading && <div className="loader"></div>}
-                </button>
+                </button>) : <></>}
             </div>
             {_feedback.length > 0 && (
                 <div>
@@ -126,7 +124,6 @@ export default function ProofsPage() {
                     ))}
                 </div>
             )}
-            <div className="divider"></div>
             {
                 _proof ? (
                     <>
@@ -140,7 +137,9 @@ export default function ProofsPage() {
                     </>
                 ) : <></>
             }
-            <Stepper step={3} onPrevClick={() => router.push("/groups")} />
+            <div className="divider"></div>
+
+            <Stepper step={3} onPrevClick={() => router.push("/join")} />
         </>
     )
 }

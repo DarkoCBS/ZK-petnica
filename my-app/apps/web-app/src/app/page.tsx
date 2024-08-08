@@ -15,7 +15,7 @@ export default function IdentitiesPage() {
 
             <div className="divider"></div>
 
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', gap: '20px' }}>
                 <button className="button" onClick={() => router.push("/groups")}>
                     Create group
                 </button>

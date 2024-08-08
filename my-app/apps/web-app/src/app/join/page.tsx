@@ -28,6 +28,8 @@ export default function GroupsPage() {
     const [_identity, setIdentity] = useState<Identity>()
     const [_groups, setGroups] = useState<GroupType[]>([])
     const [selectedGroup, setSelectedGroup] = useState<SingleValue<{value: string, label: string}>>()
+    const [success, setSuccess] = useState(false)
+    const [fail, setFail] = useState(false)
 
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
@@ -103,10 +105,14 @@ export default function GroupsPage() {
 
         if (response.status === 200) {
             addUser(_identity.commitment.toString())
+            setSuccess(true)
+            setFail(false)
 
             setLogs(`You have joined the event! 🎉`)
         } else {
             setLogs("Some error occurred, please try again!")
+            setFail(true)
+            setSuccess(false)
         }
 
         setLoading(false)
@@ -166,15 +172,17 @@ export default function GroupsPage() {
                 </button>
             </div>
 
-            {/* {_users.length > 0 && (
-                <div>
-                    {_users.map((user, i) => (
-                        <div key={i}>
-                            <p className="box box-text">{user.toString()}</p>
-                        </div>
-                    ))}
-                </div>
-            )} */}
+            {fail ? (
+                <div className="flashy-message fail-message">Failed! You are already in this group!</div>
+            ) : (
+                <></>
+            )}
+
+            {success ? (
+                <div className="flashy-message success-message">Successful! You are now part of {selectedGroup?.label}!</div>
+            ) : (
+                <></>
+            )}
 
             <div className="divider"></div>
 
