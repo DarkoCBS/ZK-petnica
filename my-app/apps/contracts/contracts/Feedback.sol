@@ -23,7 +23,7 @@ contract Feedback is ERC721Enumerable {
     mapping (uint256 groupId => uint256[] identityCommitments) public groupIdsToIdentityCommitments;
 
 
-    constructor(address semaphoreAddress) ERC721("AnonymousEvents", "AE") {
+    constructor(address semaphoreAddress) ERC721("ZK Events", "ZK") {
         semaphore = ISemaphore(semaphoreAddress);
 
         // Create a default group

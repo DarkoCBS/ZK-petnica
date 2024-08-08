@@ -272,18 +272,16 @@ a {
     border: 1px solid var(--red300);
 }
 
-.success-message-proof {
-    font-size: xx-large;
-    background-color: var(--green100);
-    color: var(--green700);
-    border: 1px solid var(--green300);
+.fail-message-proof {
+    color: #fff;
+    background-color: #ff4d4d;
+    border: 2px solid #ff0000;
 }
 
-.fail-message-proof {
-    font-size: xx-large;
-    background-color: var(--red100);
-    color: var(--red700);
-    border: 1px solid var(--red300);
+.success-message-proof {
+    color: #fff;
+    background-color: #4caf50;
+    border: 2px solid #008000;
 }
 
 @keyframes spin {
