@@ -19,9 +19,10 @@ export default function ProofsPage() {
     const [_loading, setLoading] = useState(false)
     const [_identity, setIdentity] = useState<Identity>()
     const [_proof, setProof] = useState<{
-        points: any, merkleTreeDepth: any, merkleTreeRoot: any, nullifier: any, message: any, groupId: any
+        points: any, merkleTreeDepth: any, merkleTreeRoot: any, nullifier: any, message: any, groupId: any, mintTo: any
     }>()
     const params = JSON.parse(decodeURIComponent(searchParams.id as unknown as string))
+    const [_mintTo, setMintTo] = useState("")
 
     useEffect(() => {
         const privateKey = localStorage.getItem("identity")
@@ -91,7 +92,7 @@ export default function ProofsPage() {
                 )
 
                 setProof({
-                    points, merkleTreeDepth, merkleTreeRoot, nullifier, message, groupId: params,
+                    points, merkleTreeDepth, merkleTreeRoot, nullifier, message, groupId: params, mintTo: _mintTo
                 })
 
             } catch (error) {
@@ -102,12 +103,24 @@ export default function ProofsPage() {
                 setLoading(false)
             }
         }
-    }, [_identity, _users, addFeedback, setLogs])
+    }, [_identity, _users, setLogs, _mintTo, params])
 
     console.log(`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`)
 
+
     return (
         <>
+            <div>
+                <p className="label">Mint to</p>
+                <input
+                    type="text"
+                    placeholder="Address"
+                    value={_mintTo}
+                    onChange={(e) => setMintTo(e.target.value)}
+                    className="input"
+                />
+            </div>
+
             <div>
                 {!_proof ? (
                 <button className="button" onClick={enterEvent} disabled={_loading}>
