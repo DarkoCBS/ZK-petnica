@@ -42,7 +42,7 @@ export default function GroupsPage() {
 
     useEffect(() => {
         if (_users.length > 0) {
-            setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
+            // setLogs(`${_users.length} user${_users.length > 1 ? "s" : ""} retrieved from the group 🤙🏽`)
         }
     }, [_users, setLogs])
 
@@ -75,7 +75,7 @@ export default function GroupsPage() {
         }
 
         setLoading(true)
-        setLogs(`Joining the Feedback group...`)
+        setLogs(`Joining group...`)
 
         let response: any
 
@@ -104,7 +104,7 @@ export default function GroupsPage() {
         if (response.status === 200) {
             addUser(_identity.commitment.toString())
 
-            setLogs(`You have joined the Feedback group event 🎉 Share your feedback anonymously!`)
+            setLogs(`You have joined the event! 🎉`)
         } else {
             setLogs("Some error occurred, please try again!")
         }
@@ -114,6 +114,31 @@ export default function GroupsPage() {
 
     const userHasJoined = useCallback((identity: Identity) => _users.includes(identity.commitment.toString()), [_users])
 
+    const customStyles = {
+        control: (provided: any) => ({
+            ...provided,
+            backgroundColor: 'var(--slate100)',
+            borderColor: 'var(--slate500)',
+            color: 'var(--slate700)',
+        }),
+        menu: (provided: any) => ({
+            ...provided,
+            backgroundColor: 'var(--slate100)',
+        }),
+        option: (provided: any, state: any) => ({
+            ...provided,
+            backgroundColor: state.isSelected ? 'var(--slate300)' : 'var(--slate100)',
+            color: 'var(--slate700)',
+            '&:hover': {
+                backgroundColor: 'var(--slate200)',
+            },
+        }),
+        singleValue: (provided: any) => ({
+            ...provided,
+            color: 'var(--slate700)',
+        }),
+    }
+    
     return (
         <>
             <h2>Available Events</h2>
@@ -126,6 +151,7 @@ export default function GroupsPage() {
                     value={selectedGroup}
                     onChange={(e) => setSelectedGroup(e)}
                     isMulti={false}
+                    styles={customStyles}
                 />
             </div>
 

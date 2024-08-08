@@ -15,6 +15,7 @@ declare global {
 }
 
 export default function GroupsPage() {
+    const { setLogs } = useContext(LogsContext)
     const router = useRouter()
     const [_loading, setLoading] = useState(false)
     const [_groupName, setGroupName] = useState("")
@@ -39,6 +40,12 @@ export default function GroupsPage() {
                     groupName: _groupName
                 })
             })
+        }
+
+        if (response.status === 200) {
+            setLogs("Successfully created group 🤙🏽")
+        } else {
+            setLogs("Failed to create group")
         }
 
         setLoading(false)
