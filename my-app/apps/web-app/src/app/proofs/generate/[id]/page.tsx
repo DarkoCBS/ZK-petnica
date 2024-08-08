@@ -81,7 +81,7 @@ export default function ProofsPage() {
                 console.log(res.data)
                 console.log(_users)
 
-                const group = new Group(_users)
+                const group = new Group(res.data)
 
                 const { points, merkleTreeDepth, merkleTreeRoot, nullifier, message } = await generateProof(
                     _identity,
