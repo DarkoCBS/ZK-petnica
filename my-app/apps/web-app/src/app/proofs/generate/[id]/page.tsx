@@ -128,15 +128,6 @@ export default function ProofsPage() {
                     {_loading && <div className="loader"></div>}
                 </button>) : <></>}
             </div>
-            {_feedback.length > 0 && (
-                <div>
-                    {_feedback.map((f, i) => (
-                        <div key={i}>
-                            <p className="box box-text">{f}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
             {
                 _proof ? (
                     <>
