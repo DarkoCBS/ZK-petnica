@@ -79,9 +79,6 @@ export default function ProofsPage() {
 
                 const res = await response.json()
 
-                console.log(res.data)
-                console.log(_users)
-
                 const group = new Group(res.data)
 
                 const { points, merkleTreeDepth, merkleTreeRoot, nullifier, message } = await generateProof(
@@ -105,7 +102,7 @@ export default function ProofsPage() {
         }
     }, [_identity, _users, setLogs, _mintTo, params])
 
-    console.log(`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`)
+    if(_proof) console.log(`localhost:3000/proofs/${encodeURIComponent(JSON.stringify(_proof))}`)
 
 
     return (
