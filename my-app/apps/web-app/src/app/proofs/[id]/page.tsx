@@ -77,6 +77,12 @@ export default function ProofsPage() {
 
     return (
         <>
+            {_loading ? (
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div className="loader" style={{ width: '100px', height: '100px' }}></div>
+                </div>
+            ) : <></>
+            }
             {fail ? (
                 <div className="flashy-message fail-message-proof">Failed! ⛔</div>
             ) : (
