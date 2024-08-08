@@ -252,6 +252,40 @@ a {
     border: 2px solid #008000;
 }
 
+.flashy-message {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.success-message {
+    background-color: var(--green100);
+    color: var(--green700);
+    border: 1px solid var(--green300);
+}
+
+.fail-message {
+    background-color: var(--red100);
+    color: var(--red700);
+    border: 1px solid var(--red300);
+}
+
+.success-message-proof {
+    font-size: xx-large;
+    background-color: var(--green100);
+    color: var(--green700);
+    border: 1px solid var(--green300);
+}
+
+.fail-message-proof {
+    font-size: xx-large;
+    background-color: var(--red100);
+    color: var(--red700);
+    border: 1px solid var(--red300);
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);

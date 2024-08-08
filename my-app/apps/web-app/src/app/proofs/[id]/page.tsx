@@ -78,13 +78,13 @@ export default function ProofsPage() {
     return (
         <>
             {fail ? (
-                <div className="flashy-message fail-message">Failed! ⛔</div>
+                <div className="flashy-message fail-message-proof">Failed! ⛔</div>
             ) : (
                 <></>
             )}
 
             {success ? (
-                <div className="flashy-message success-message">Successful! You can enter event!</div>
+                <div className="flashy-message success-message-proof">Successful! You can enter event!</div>
             ) : (
                 <></>
             )}
