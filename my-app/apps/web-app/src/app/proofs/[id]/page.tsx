@@ -77,19 +77,17 @@ export default function ProofsPage() {
 
     return (
         <>
-            <div className="divider"></div>
-
             {fail ? (
-                <div>Failed!</div>
+                <div className="flashy-message fail-message">Failed! ⛔</div>
             ) : (
                 <></>
             )}
 
             {success ? (
-                <div>Successful!</div>
+                <div className="flashy-message success-message">Successful! You can enter event!</div>
             ) : (
                 <></>
             )}
         </>
-    )
+    );
 }

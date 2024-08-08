@@ -231,6 +231,27 @@ a {
     background-color: var(--slate100);
 }
 
+.flashy-message {
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.fail-message {
+    color: #fff;
+    background-color: #ff4d4d;
+    border: 2px solid #ff0000;
+}
+
+.success-message {
+    color: #fff;
+    background-color: #4caf50;
+    border: 2px solid #008000;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
