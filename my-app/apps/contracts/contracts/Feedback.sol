@@ -78,6 +78,8 @@ contract Feedback is ERC721Enumerable {
             points
         );
 
+        // uint256 membershipUint256 = 0x6d656d62657273686970;
+
         semaphore.validateProof(groupId, proof);
 
         // Generate NFT as a proof of participation
